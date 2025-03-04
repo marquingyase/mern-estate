@@ -1,15 +1,16 @@
-import { Route, Routes, useLocation } from "react-router";
+import { Route, Routes } from "react-router";
 import { Toaster } from "react-hot-toast";
 import { Home } from "./pages/Home";
 import { SignIn } from "./pages/SignIn";
 import { About } from "./pages/About";
 import { SignUp } from "./pages/SignUp";
 import { Profile } from "./pages/Profile";
+import { Header } from "./components/Header";
 
 function App() {
-  const { pathname } = useLocation();
-  const excludePaths = ["/sign-in", "/sign-up"];
-  const shouldShowHeaderFooter = !excludePaths.includes(pathname);
+  // const { pathname } = useLocation();
+  // const excludePaths = ["/sign-in", "/sign-up"];
+  // const shouldShowHeaderFooter = !excludePaths.includes(pathname);
 
   return (
     <>
@@ -47,7 +48,7 @@ function App() {
           },
         }}
       />
-      {/* {shouldShowHeaderFooter && <Header />} */}
+      <Header />
       <Routes>
         {/* Routes */}
         <Route index element={<Home />} />
