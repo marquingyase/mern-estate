@@ -1,10 +1,15 @@
 import { Route, Routes, useLocation } from "react-router";
 import { Toaster } from "react-hot-toast";
+import { Home } from "./pages/Home";
+import { SignIn } from "./pages/SignIn";
+import { About } from "./pages/About";
+import { SignUp } from "./pages/SignUp";
+import { Profile } from "./pages/Profile";
 
 function App() {
-  // const { pathname } = useLocation();
-  // const excludePaths = ["/log-in", "/sign-up"];
-  // const shouldShowHeaderFooter = !excludePaths.includes(pathname);
+  const { pathname } = useLocation();
+  const excludePaths = ["/sign-in", "/sign-up"];
+  const shouldShowHeaderFooter = !excludePaths.includes(pathname);
 
   return (
     <>
@@ -45,7 +50,12 @@ function App() {
       {/* {shouldShowHeaderFooter && <Header />} */}
       <Routes>
         {/* Routes */}
-        {/* <Route index element={<HomePage />} /> */}
+        <Route index element={<Home />} />
+        <Route path="sign-in" element={<SignIn />} />
+        <Route path="sign-up" element={<SignUp />} />
+        <Route path="about" element={<About />} />
+        <Route path="profile" element={<Profile />} />
+        <Route path="*" element={<About />} />
       </Routes>
       {/* {shouldShowHeaderFooter && <Footer />} */}
     </>
