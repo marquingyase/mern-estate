@@ -2,6 +2,8 @@
 
 export const SignUp = () => {
   return (
-    <div>SignUp</div>
+    <section>
+      
+    </section>
   )
 }

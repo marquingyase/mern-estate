@@ -1,11 +1,11 @@
 import { Route, Routes } from "react-router";
 import { Toaster } from "react-hot-toast";
-import { Home } from "./pages/Home";
-import { SignIn } from "./pages/SignIn";
-import { About } from "./pages/About";
-import { SignUp } from "./pages/SignUp";
-import { Profile } from "./pages/Profile";
-import { Header } from "./components/Header";
+import { HomePage } from "./pages/HomePage";
+import { SignInPage } from "./pages/SignInPage";
+import { AboutPage } from "./pages/AboutPage";
+import { SignUpPage } from "./pages/SignUpPage";
+import { ProfilePage } from "./pages/ProfilePage";
+import { Header } from "./components/nav/Header";
 
 function App() {
   // const { pathname } = useLocation();
@@ -51,12 +51,12 @@ function App() {
       <Header />
       <Routes>
         {/* Routes */}
-        <Route index element={<Home />} />
-        <Route path="sign-in" element={<SignIn />} />
-        <Route path="sign-up" element={<SignUp />} />
-        <Route path="about" element={<About />} />
-        <Route path="profile" element={<Profile />} />
-        <Route path="*" element={<About />} />
+        <Route index element={<HomePage />} />
+        <Route path="sign-in" element={<SignInPage />} />
+        <Route path="sign-up" element={<SignUpPage />} />
+        <Route path="about" element={<AboutPage />} />
+        <Route path="profile" element={<ProfilePage />} />
+        <Route path="*" element={<AboutPage />} />
       </Routes>
       {/* {shouldShowHeaderFooter && <Footer />} */}
     </>
