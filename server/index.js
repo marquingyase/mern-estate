@@ -1,12 +1,15 @@
 import express from "express";
 import mongoose from "mongoose";
 import { configDotenv } from "dotenv";
+import morgan from "morgan";
 import userRouter from "./routes/user.routes.js";
 import authRouter from "./routes/auth.routes.js";
 
 configDotenv();
 const app = express();
 app.use(express.json());
+app.use(morgan("dev"));
+app.use(express.urlencoded({ extended: true }));
 
 mongoose
   .connect(process.env.MONGODB_URI)
