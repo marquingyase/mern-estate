@@ -54,7 +54,7 @@ export const signIn = async (req, res, next) => {
     res
       .cookie("access_token", token, {
         httpOnly: true,
-        // secure: true, // only set cookie over HTTPS
+        secure: false, // only set cookie over HTTPS
         // expires: new Date(Date.now() + 3600000), // 1 hour
       })
       .status(200)
