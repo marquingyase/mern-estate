@@ -6,6 +6,7 @@ import { AboutPage } from "./pages/AboutPage";
 import { SignUpPage } from "./pages/SignUpPage";
 import { ProfilePage } from "./pages/ProfilePage";
 import { Header } from "./components/nav/Header";
+import { PrivateRoute } from "./components/PrivateRoute";
 
 function App() {
   // const { pathname } = useLocation();
@@ -55,7 +56,9 @@ function App() {
         <Route path="sign-in" element={<SignInPage />} />
         <Route path="sign-up" element={<SignUpPage />} />
         <Route path="about" element={<AboutPage />} />
-        <Route path="profile" element={<ProfilePage />} />
+        <Route element={<PrivateRoute />}>
+          <Route path="profile" element={<ProfilePage />} />
+        </Route>
         <Route path="*" element={<AboutPage />} />
       </Routes>
       {/* {shouldShowHeaderFooter && <Footer />} */}
