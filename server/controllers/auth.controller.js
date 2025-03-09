@@ -61,10 +61,85 @@ export const signIn = async (req, res, next) => {
       .json({
         message: "User logged in successfully",
         user: {
+          avatar: user.avatar,
           username: user.username,
           email: user.email,
         },
       });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const googleSignIn = async (req, res, next) => {
+  const { email, username, avatar } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (user) {
+      const token = jwt.sign(
+        {
+          userId: user._id,
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: "1h" }
+      );
+
+      res
+        .cookie("access_token", token, {
+          httpOnly: true,
+          secure: false, // only set cookie over HTTPS
+          // expires: new Date(Date.now() + 3600000), // 1 hour
+        })
+        .status(200)
+        .json({
+          message: "User logged in successfully",
+          user: {
+            avatar: user.avatar,
+            username: user.username,
+            email: user.email,
+          },
+        });
+
+    } else {
+      const generatedPassword =
+        Math.random().toString(36).slice(-8) +
+        Math.random().toString(36).slice(-8);
+      const hashedPassword = bcrypt.hashSync(generatedPassword, 10);
+
+      const newUser = new User({
+        username:
+          username.split(" ").join("").toLowerCase() +
+          Math.random().toString(36).slice(-4),
+        password: hashedPassword,
+        email,
+        avatar,
+      });
+      const newUserDetails = await newUser.save();
+
+      const token = jwt.sign(
+        {
+          userId: newUserDetails._id,
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: "1h" }
+      );
+
+      res
+        .cookie("access_token", token, {
+          httpOnly: true,
+          secure: false, // only set cookie over HTTPS
+          // expires: new Date(Date.now() + 3600000), // 1 hour
+        })
+        .status(200)
+        .json({
+          message: "User logged in successfully",
+          user: {
+            avatar: newUserDetails.avatar,
+            username: newUserDetails.username,
+            email: newUserDetails.email,
+          },
+        });
+    }
   } catch (error) {
     next(error);
   }

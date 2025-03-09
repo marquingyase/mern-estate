@@ -2,6 +2,10 @@ import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
   {
+    avatar: {
+      type: String,
+      default: "https://i.stack.imgur.com/l60Hf.png",
+    },
     username: {
       type: String,
       required: true,
