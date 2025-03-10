@@ -1,20 +1,21 @@
 import express from "express";
-import mongoose from "mongoose";
 import { configDotenv } from "dotenv";
 import morgan from "morgan";
+import { db as mongodb } from "./utils/db.js";
 import userRouter from "./routes/user.routes.js";
 import authRouter from "./routes/auth.routes.js";
+import { errorMiddleware } from "./utils/error.js";
+import cors from "cors";
 
 configDotenv();
 const app = express();
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 
-mongoose
-  .connect(process.env.MONGODB_URI)
-  .then(() => console.log("Connected to MongoDB"))
-  .catch((err) => console.error(err));
+// Connect to MongoDB
+mongodb();
 
 //APIS
 app.use("/api/user", userRouter);
@@ -24,12 +25,5 @@ app.listen(process.env.PORT, (req, res) => {
   console.log(`Server is running on port ${process.env.PORT}`);
 });
 
-app.use((err, req, res, next) => {
-  const statusCode = err.statusCode || 500;
-  const message = err.message || "Internal Server Error ";
-  return res.status(statusCode).json({
-    success: false,
-    statusCode,
-    message,
-  });
-});
+// Error handling middleware
+app.use(errorMiddleware);

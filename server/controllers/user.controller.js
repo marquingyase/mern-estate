@@ -1,3 +1,11 @@
-export const SignUp = async (req, res, next) => {
-  res.send(`<h1>Classics</h1> <h6>Hmmm</h6>`);
+export const uploadImage = async (req, res, next) => {
+  try {
+    const avatar = req.file.path;
+    res.json({
+      message: "Uploaded successfully",
+      avatar: avatar,
+    });
+  } catch (error) {
+    next(error);
+  }
 };
