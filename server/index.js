@@ -6,6 +6,7 @@ import userRouter from "./routes/user.routes.js";
 import authRouter from "./routes/auth.routes.js";
 import { errorMiddleware } from "./utils/error.js";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 
 configDotenv();
 const app = express();
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+app.use(cookieParser());
 
 // Connect to MongoDB
 mongodb();

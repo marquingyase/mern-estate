@@ -5,25 +5,30 @@ import jwt from "jsonwebtoken";
 export const signUp = async (req, res, next) => {
   const { username, password, email } = req.body;
   try {
-    const user = await User.findOne({
-      $or: [{ username }, { email }],
-    });
+    const user = await User.findOne({ email });
+    const usernameGenerate =
+      username.split(" ").join("").toLowerCase() +
+      Math.random().toString(36).slice(-4);
 
     if (user) {
-      if ((user.username === username) & (user.email === email)) {
-        return res
-          .status(409)
-          .json({ message: "Username and Email already exists" });
-      }
+      // if ((user.username === username) & (user.email === email)) {
+      //   return res
+      //     .status(409)
+      //     .json({ message: "Username and Email already exists" });
+      // }
       if (user.email === email) {
         return res.status(409).json({ message: "Email already exists" });
       }
-      if (user.username === username) {
+      if (user.username === usernameGenerate) {
         return res.status(409).json({ message: "Username already exists" });
       }
     }
     const hashedPassword = bcrypt.hashSync(password, 10);
-    const newUser = new User({ username, password: hashedPassword, email });
+    const newUser = new User({
+      username: usernameGenerate,
+      password: hashedPassword,
+      email,
+    });
     await newUser.save();
     res.status(201).json({ message: "User created successfully" });
   } catch (error) {
@@ -45,7 +50,7 @@ export const signIn = async (req, res, next) => {
 
     const token = jwt.sign(
       {
-        userId: user._id,
+        id: user._id,
       },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
@@ -61,6 +66,7 @@ export const signIn = async (req, res, next) => {
       .json({
         message: "User logged in successfully",
         user: {
+          id: user._id,
           avatar: user.avatar,
           username: user.username,
           email: user.email,
@@ -94,12 +100,12 @@ export const googleSignIn = async (req, res, next) => {
         .json({
           message: "User logged in successfully",
           user: {
+            id: user._id,
             avatar: user.avatar,
             username: user.username,
             email: user.email,
           },
         });
-
     } else {
       const generatedPassword =
         Math.random().toString(36).slice(-8) +

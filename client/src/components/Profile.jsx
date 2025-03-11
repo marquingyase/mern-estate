@@ -1,43 +1,4 @@
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useRef, useState } from "react";
-import axios from "axios";
-import { signInFailure, signInStart } from "../redux/user/userSlice";
-import toast from "react-hot-toast";
-
-export const Profile = () => {
-  const { user } = useSelector((state) => state.user);
-  const [img, setImg] = useState(user.avatar);
-  const { loading } = useSelector((state) => state.user);
-  const avatarRef = useRef(null);
-  const [file, setFile] = useState(undefined);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (file) {
-      async function handleSubmit() {
-        dispatch(signInStart());
-        const formData = new FormData();
-        formData.append("file", file);
-        await axios
-          .put("/api/user/upload-image", formData, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          })
-          .then((response) => {
-            toast.success(response.data.message);
-            setImg(response.data.avatar);
-          })
-          .catch((err) => {
-            dispatch(signInFailure(err.response.data.message));
-            toast.error(err.response.data.message);
-          });
-      }
-
-      handleSubmit();
-    }
-  }, [dispatch, file]);
-
+export const Profile = ({ loading, user, avatarRef, setFile }) => {
   return (
     <main className="p-3 max-w-lg mx-auto">
       <h1 className="font-semibold text-center mt-7 text-3xl">Profile</h1>
@@ -52,7 +13,7 @@ export const Profile = () => {
           accept="image/*"
         />
         <img
-          src={img || user.avatar}
+          src={user.avatar}
           alt="Profile"
           onClick={() => avatarRef.current.click()}
           className="rounded-full h-24 w-24 object-cover cursor-pointer self-center mt-2"

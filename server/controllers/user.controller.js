@@ -1,9 +1,37 @@
-export const uploadImage = async (req, res, next) => {
+import User from "../models/user.models.js";
+
+export const updateUser = async (req, res, next) => {
+  if (req.user.id !== req.params.id) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
   try {
-    const avatar = req.file.path;
+    if (req.body.password) {
+      const hashedPassword = bcrypt.hashSync(req.body.password, 10);
+      req.body.password = hashedPassword;
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      {
+        $set: {
+          avatar: req.file.path,
+          username: req.body.username,
+          email: req.body.email,
+          password: req.body.password,
+        },
+      },
+      { new: true }
+    );
+
     res.json({
-      message: "Uploaded successfully",
-      avatar: avatar,
+      message: "Updated successfully",
+      user: {
+        id: updatedUser._id,
+        avatar: updatedUser.avatar,
+        username: updatedUser.username,
+        email: updatedUser.email,
+        password: updatedUser.password,
+      },
     });
   } catch (error) {
     next(error);

@@ -4,7 +4,8 @@ const userSchema = new mongoose.Schema(
   {
     avatar: {
       type: String,
-      default: "https://i.stack.imgur.com/l60Hf.png",
+      default:
+        "https://media.istockphoto.com/id/2151669184/vector/vector-flat-illustration-in-grayscale-avatar-user-profile-person-icon-gender-neutral.jpg?s=2048x2048&w=is&k=20&c=mwUeVWLqj8MiuGo3ZjStxTvHdVab26OtVitg65Gz0B8=",
     },
     username: {
       type: String,
