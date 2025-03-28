@@ -19,7 +19,7 @@ export const SignIn = ({ handleChange, handleSubmit, loading, Link }) => {
           className="border p-3 rounded-lg"
           id="password"
           onChange={handleChange}
-          required
+          // required
         />
         <button
           disabled={loading}

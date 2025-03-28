@@ -1,4 +1,5 @@
 import User from "../models/user.models.js";
+import bcrypt from "bcryptjs";
 
 export const updateUser = async (req, res, next) => {
   if (req.user.id !== req.params.id) {
@@ -14,7 +15,7 @@ export const updateUser = async (req, res, next) => {
       req.params.id,
       {
         $set: {
-          avatar: req.file.path,
+          avatar: req.file?.path,
           username: req.body.username,
           email: req.body.email,
           password: req.body.password,
@@ -23,15 +24,11 @@ export const updateUser = async (req, res, next) => {
       { new: true }
     );
 
+    const { password, ...rest } = updatedUser._doc;
+
     res.json({
       message: "Updated successfully",
-      user: {
-        id: updatedUser._id,
-        avatar: updatedUser.avatar,
-        username: updatedUser.username,
-        email: updatedUser.email,
-        password: updatedUser.password,
-      },
+      user: rest,
     });
   } catch (error) {
     next(error);

@@ -1,10 +1,10 @@
-export const Profile = ({ loading, user, avatarRef, setFile }) => {
+export const Profile = ({ loading, user, avatarRef, setFile, handleChange, handleSubmit }) => {
   return (
     <main className="p-3 max-w-lg mx-auto">
       <h1 className="font-semibold text-center mt-7 text-3xl">Profile</h1>
       <p className="text-center mb-7">This is your profile page.</p>
 
-      <form className="flex flex-col gap-4">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input
           type="file"
           ref={avatarRef}
@@ -22,17 +22,22 @@ export const Profile = ({ loading, user, avatarRef, setFile }) => {
           type="text"
           placeholder="Username"
           className="border p-3 rounded-lg"
+          defaultValue={user.username}
+          onChange={handleChange}
           id="username"
         />
         <input
           type="email"
           placeholder="Email"
+          defaultValue={user.email}
+          onChange={handleChange}
           className="border p-3 rounded-lg"
           id="email"
         />
         <input
-          type="text"
+          type="password"
           placeholder="Password"
+          onChange={handleChange}
           className="border p-3 rounded-lg"
           id="password"
         />
