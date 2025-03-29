@@ -23,10 +23,6 @@ const listingSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    discount: {
-      type: Number,
-      required: true,
-    },
     discountedPrice: {
       type: Number,
       required: true,

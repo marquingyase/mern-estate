@@ -1,4 +1,14 @@
-export const Profile = ({ loading, user, avatarRef, setFile, handleChange, handleSubmit, handleSignout,handleDelete }) => {
+export const Profile = ({
+  Link,
+  loading,
+  user,
+  avatarRef,
+  setFile,
+  handleChange,
+  handleSubmit,
+  handleSignout,
+  handleDelete,
+}) => {
   return (
     <main className="p-3 max-w-lg mx-auto">
       <h1 className="font-semibold text-center mt-7 text-3xl">Profile</h1>
@@ -43,14 +53,23 @@ export const Profile = ({ loading, user, avatarRef, setFile, handleChange, handl
         />
         <button
           disabled={loading}
-          className="bg-slate-700 text-white p-3 uppercase rounded-lg hover:opacity-90 disabled:opacity-80"
+          className="bg-slate-700 text-white p-3 uppercase rounded-lg hover:opacity-90 disabled:opacity-80 cursor-pointer"
         >
           {loading ? "Loading..." : "Update Profile"}
         </button>
+        <Link to="/create-listing">
+          <button className="bg-green-700 w-full text-white p-3 uppercase rounded-lg hover:opacity-90 disabled:opacity-80 cursor-pointer">
+            Create Listing
+          </button>
+        </Link>
       </form>
       <div className="flex justify-between mt-5">
-        <span className="cursor-pointer text-red-700" onClick={handleDelete}>Delete Account</span>
-        <span className="cursor-pointer text-red-700" onClick={handleSignout}>Sign Out</span>
+        <span className="cursor-pointer text-red-700" onClick={handleDelete}>
+          Delete Account
+        </span>
+        <span className="cursor-pointer text-red-700" onClick={handleSignout}>
+          Sign Out
+        </span>
       </div>
     </main>
   );

@@ -6,7 +6,7 @@ export const add = async (req, res, next) => {
     description,
     address,
     price,
-    discount,
+    discountedPrice,
     bathrooms,
     bedrooms,
     furnished,
@@ -22,7 +22,6 @@ export const add = async (req, res, next) => {
       description,
       address,
       price,
-      discount,
       bathrooms,
       bedrooms,
       furnished,
@@ -31,7 +30,7 @@ export const add = async (req, res, next) => {
       offer,
       images,
       user,
-      discountedPrice: price - (price * discount) / 100,
+      discountedPrice
     });
     await newListing.save();
 

@@ -5,6 +5,7 @@ import { SignInPage } from "./pages/SignInPage";
 import { AboutPage } from "./pages/AboutPage";
 import { SignUpPage } from "./pages/SignUpPage";
 import { ProfilePage } from "./pages/ProfilePage";
+import { ListingPage } from "./pages/ListingPage.jsx";
 import { Header } from "./components/nav/Header";
 import { PrivateRoute } from "./components/PrivateRoute";
 
@@ -25,28 +26,28 @@ function App() {
           className: "",
           duration: 5000,
 
-          success: {
-            duration: 3000,
-            style: {
-              background: "green",
-              color: "#fff",
-            },
-            iconTheme: {
-              primary: "white",
-              secondary: "green",
-            },
-          },
-          error: {
-            style: {
-              background: "red",
-              color: "#fff",
-            },
-            duration: 3000,
-            iconTheme: {
-              primary: "white",
-              secondary: "red",
-            },
-          },
+          // success: {
+          //   duration: 3000,
+          //   style: {
+          //     background: "green",
+          //     color: "#fff",
+          //   },
+          //   iconTheme: {
+          //     primary: "white",
+          //     secondary: "green",
+          //   },
+          // },
+          // error: {
+          //   style: {
+          //     background: "red",
+          //     color: "#fff",
+          //   },
+          //   duration: 3000,
+          //   iconTheme: {
+          //     primary: "white",
+          //     secondary: "red",
+          //   },
+          // },
         }}
       />
       <Header />
@@ -58,6 +59,7 @@ function App() {
         <Route path="about" element={<AboutPage />} />
         <Route element={<PrivateRoute />}>
           <Route path="profile" element={<ProfilePage />} />
+          <Route path="create-listing" element={<ListingPage />} />
         </Route>
         <Route path="*" element={<AboutPage />} />
       </Routes>
