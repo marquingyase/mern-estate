@@ -7,60 +7,73 @@ import { start, success, failure } from "../redux/user/userSlice";
 import { Link } from "react-router";
 
 export const ListingPage = () => {
-  const { user } = useSelector((state) => state.user);
+  const [files, setFiles] = useState([]);
   const { loading } = useSelector((state) => state.user);
-  const avatarRef = useRef(null);
-  const [file, setFile] = useState(undefined);
   const dispatch = useDispatch();
-  const [formData, setFormData] = useState({});
+  const [formDatas, setFormData] = useState({
+    images: [],
+  });
 
-  useEffect(() => {
-    if (file) {
-      async function handleSubmit() {
-        dispatch(start());
-        const formData = new FormData();
-        formData.append("file", file);
-        await axios
-          .put(`/api/user/update-user/${user._id}`, formData, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          })
-          .then((response) => {
-            toast.success(response.data.message);
-            dispatch(success(response.data.user));
-          })
-          .catch((err) => {
-            dispatch(failure());
-            toast.error(err.response.data.message);
-          });
+  const handleImageSubmit = async (e) => {
+    // e.preventDefault();
+    if (files.length > 0 && files.length + formDatas.images.length < 7) {
+      dispatch(start());
+      const formData = new FormData();
+      for (let i = 0; i < files.length; i++) {
+        formData.append("files[]", files[i]); // Append each file separately
       }
 
-      handleSubmit();
-    }
-  }, [dispatch, file, user._id]);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      dispatch(start());
       await axios
-        .put(`/api/user/update-user/${user._id}`, formData, {
-          withCredentials: true,
+        .post("/api/listing/add-imgs", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         })
         .then((response) => {
+          dispatch(failure());
           toast.success(response.data.message);
-          dispatch(success(response.data.user));
+          setFormData({
+            ...formDatas,
+            images: formDatas.images.concat(response.data.data),
+          });
+        })
+        .catch((err) => {
+          dispatch(failure());
+          toast.error(err.response.data.message);
         });
-    } catch (err) {
-      dispatch(failure());
-      toast.error(err.response.data.message);
+    } else {
+      toast.error("You can only upload 6 images per listing");
     }
   };
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.id]: e.target.value });
-  };
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     dispatch(start());
+  //     await axios
+  //       .put(`/api/user/update-user/${user._id}`, formData, {
+  //         withCredentials: true,
+  //       })
+  //       .then((response) => {
+  //         toast.success(response.data.message);
+  //         dispatch(success(response.data.user));
+  //       });
+  //   } catch (err) {
+  //     dispatch(failure());
+  //     toast.error(err.response.data.message);
+  //   }
+  // };
 
-  return <Listing />;
+  // const handleChange = (e) => {
+  //   setFormData({ ...formData, [e.target.id]: e.target.value });
+  // };
+
+  return (
+    <Listing
+      setFiles={setFiles}
+      handleImageSubmit={handleImageSubmit}
+      formDatas={formDatas}
+      loading={loading}
+    />
+  );
 };

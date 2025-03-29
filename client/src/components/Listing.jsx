@@ -1,4 +1,9 @@
-export const Listing = () => {
+export const Listing = ({
+  setFiles,
+  handleImageSubmit,
+  formDatas,
+  loading,
+}) => {
   return (
     <main className="p-3 max-w-4xl mx-auto">
       <h1 className="font-semibold text-center my-7 text-3xl">
@@ -111,16 +116,39 @@ export const Listing = () => {
           </p>
           <div className="flex gap-4">
             <input
+              onChange={(e) => setFiles(e.target.files)}
               type="file"
               id="images"
               accept="image/*"
               multiple
               className="p-3 border rounded w-full"
             />
-            <button className="p-3 text-green-700 border border-green-700 rounded uppercase hover:shadow-lg disabled:opacity-85">
-              Upload
+            <button
+              onClick={handleImageSubmit}
+              type="button"
+              disabled={loading}
+              className="p-3 text-green-700 border border-green-700 rounded uppercase hover:shadow-lg disabled:opacity-55"
+            >
+              {loading ? "Uploading..." : "Upload"}
             </button>
           </div>
+
+          {formDatas.images.length > 0 &&
+            formDatas.images.map((img, index) => (
+              <div
+                key={index}
+                className="flex items-center justify-between p-3 gap-4 border "
+              >
+                <img
+                  src={img}
+                  alt="listing image"
+                  className="w-20 h-20 object-contain rounded-lg"
+                />
+                <button className="p-3 text-red-700 uppercase rounded-lg hover:opacity-60">
+                  Delete
+                </button>
+              </div>
+            ))}
 
           <button className="p-3 bg-slate-700 rounded-lg text-white uppercase hover:opacity-90 disabled:opacity-80">
             Create Listing

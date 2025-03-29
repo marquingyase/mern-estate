@@ -13,8 +13,8 @@ export const add = async (req, res, next) => {
     parking,
     type,
     offer,
-    images,
     user,
+    images,
   } = req.body;
   try {
     const newListing = new Listing({
@@ -30,13 +30,32 @@ export const add = async (req, res, next) => {
       offer,
       images,
       user,
-      discountedPrice
+      discountedPrice,
     });
     await newListing.save();
 
     res.status(201).json({
       message: "Listing added successfully",
       data: newListing,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const addImgs = async (req, res, next) => {
+  try {
+    const images = req.files?.map((file) => file.path);
+
+    if (!images || images.length === 0) {
+      return res.status(400).json({
+        message: "No images uploaded",
+      });
+    }
+
+    res.status(200).json({
+      message: "Upoaded successfully",
+      data: images,
     });
   } catch (error) {
     next(error);
