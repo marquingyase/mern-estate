@@ -1,4 +1,4 @@
-export const Profile = ({ loading, user, avatarRef, setFile, handleChange, handleSubmit }) => {
+export const Profile = ({ loading, user, avatarRef, setFile, handleChange, handleSubmit, handleSignout,handleDelete }) => {
   return (
     <main className="p-3 max-w-lg mx-auto">
       <h1 className="font-semibold text-center mt-7 text-3xl">Profile</h1>
@@ -49,8 +49,8 @@ export const Profile = ({ loading, user, avatarRef, setFile, handleChange, handl
         </button>
       </form>
       <div className="flex justify-between mt-5">
-        <span className="cursor-pointer text-red-700">Delete Account</span>
-        <span className="cursor-pointer text-red-700">Sign Out</span>
+        <span className="cursor-pointer text-red-700" onClick={handleDelete}>Delete Account</span>
+        <span className="cursor-pointer text-red-700" onClick={handleSignout}>Sign Out</span>
       </div>
     </main>
   );

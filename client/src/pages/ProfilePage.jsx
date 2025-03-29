@@ -3,11 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { Profile } from "../components/Profile";
 import toast from "react-hot-toast";
 import axios from "axios";
-import {
-  updateUserStart,
-  updateUserSuccess,
-  updateUserFailure,
-} from "../redux/user/userSlice";
+import { start, success, failure, logout } from "../redux/user/userSlice";
 
 export const ProfilePage = () => {
   const { user } = useSelector((state) => state.user);
@@ -20,7 +16,7 @@ export const ProfilePage = () => {
   useEffect(() => {
     if (file) {
       async function handleSubmit() {
-        dispatch(updateUserStart());
+        dispatch(start());
         const formData = new FormData();
         formData.append("file", file);
         await axios
@@ -31,10 +27,10 @@ export const ProfilePage = () => {
           })
           .then((response) => {
             toast.success(response.data.message);
-            dispatch(updateUserSuccess(response.data.user));
+            dispatch(success(response.data.user));
           })
           .catch((err) => {
-            dispatch(updateUserFailure(err.response.data.message));
+            dispatch(failure());
             toast.error(err.response.data.message);
           });
       }
@@ -45,17 +41,51 @@ export const ProfilePage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    dispatch(start());
     try {
       await axios
         .put(`/api/user/update-user/${user._id}`, formData, {
-          withCredentials: true
+          withCredentials: true,
         })
         .then((response) => {
           toast.success(response.data.message);
-          dispatch(updateUserSuccess(response.data.user));
+          dispatch(success(response.data.user));
         });
     } catch (err) {
-      dispatch(updateUserFailure(err.response.data.message));
+      dispatch(failure());
+      toast.error(err.response.data.message);
+    }
+  };
+
+  const handleDelete = async (e) => {
+    e.preventDefault();
+    try {
+      dispatch(start());
+      await axios
+        .delete(`/api/user/delete-user/${user._id}`, {
+          withCredentials: true,
+        })
+        .then((response) => {
+          dispatch(logout());
+          toast.success(response.data.message);
+        });
+    } catch (err) {
+      toast.error(err.response.data.message);
+      dispatch(failure(err.response.data.message));
+    }
+  };
+
+  const handleSignout = async (e) => {
+    e.preventDefault();
+    try {
+      await axios
+        .put(`/api/user/delete-user/${user._id}`, {
+          withCredentials: true,
+        })
+        .then((response) => {
+          toast.success(response.data.message);
+        });
+    } catch (err) {
       toast.error(err.response.data.message);
     }
   };
@@ -72,6 +102,8 @@ export const ProfilePage = () => {
       user={user}
       handleChange={handleChange}
       handleSubmit={handleSubmit}
+      handleDelete={handleDelete}
+      handleSignout={handleSignout}
     />
   );
 };

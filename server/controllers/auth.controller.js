@@ -11,16 +11,9 @@ export const signUp = async (req, res, next) => {
       Math.random().toString(36).slice(-4);
 
     if (user) {
-      // if ((user.username === username) & (user.email === email)) {
-      //   return res
-      //     .status(409)
-      //     .json({ message: "Username and Email already exists" });
-      // }
+
       if (user.email === email) {
         return res.status(409).json({ message: "Email already exists" });
-      }
-      if (user.username === usernameGenerate) {
-        return res.status(409).json({ message: "Username already exists" });
       }
     }
     const hashedPassword = bcrypt.hashSync(password, 10);
@@ -50,11 +43,13 @@ export const signIn = async (req, res, next) => {
 
     const token = jwt.sign(
       {
-        id: user._id,
+        _id: user._id,
       },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
+
+    const { password: pass, ...rest } = user._doc;
 
     res
       .cookie("access_token", token, {
@@ -65,12 +60,7 @@ export const signIn = async (req, res, next) => {
       .status(200)
       .json({
         message: "User logged in successfully",
-        user: {
-          id: user._id,
-          avatar: user.avatar,
-          username: user.username,
-          email: user.email,
-        },
+        user: rest,
       });
   } catch (error) {
     next(error);
@@ -84,11 +74,13 @@ export const googleSignIn = async (req, res, next) => {
     if (user) {
       const token = jwt.sign(
         {
-          userId: user._id,
+          _id: user._id,
         },
         process.env.JWT_SECRET,
         { expiresIn: "1h" }
       );
+
+      const { password: pass, ...rest } = user._doc;
 
       res
         .cookie("access_token", token, {
@@ -99,12 +91,7 @@ export const googleSignIn = async (req, res, next) => {
         .status(200)
         .json({
           message: "User logged in successfully",
-          user: {
-            id: user._id,
-            avatar: user.avatar,
-            username: user.username,
-            email: user.email,
-          },
+          user: rest,
         });
     } else {
       const generatedPassword =
@@ -124,11 +111,13 @@ export const googleSignIn = async (req, res, next) => {
 
       const token = jwt.sign(
         {
-          userId: newUserDetails._id,
+          _id: newUserDetails._id,
         },
         process.env.JWT_SECRET,
         { expiresIn: "1h" }
       );
+
+      const { password: pass, ...rest } = newUserDetails._doc;
 
       res
         .cookie("access_token", token, {
@@ -139,11 +128,7 @@ export const googleSignIn = async (req, res, next) => {
         .status(200)
         .json({
           message: "User logged in successfully",
-          user: {
-            avatar: newUserDetails.avatar,
-            username: newUserDetails.username,
-            email: newUserDetails.email,
-          },
+          user: rest,
         });
     }
   } catch (error) {

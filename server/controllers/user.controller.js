@@ -2,8 +2,8 @@ import User from "../models/user.models.js";
 import bcrypt from "bcryptjs";
 
 export const updateUser = async (req, res, next) => {
-  if (req.user.id !== req.params.id) {
-    return res.status(401).json({ message: "Unauthorized" });
+  if (req.user._id !== req.params.id) {
+    return res.status(401).json({ message: "You are unauthorized" });
   }
   try {
     if (req.body.password) {
@@ -26,10 +26,30 @@ export const updateUser = async (req, res, next) => {
 
     const { password, ...rest } = updatedUser._doc;
 
-    res.json({
+    res.status(201).json({
       message: "Updated successfully",
       user: rest,
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteUser = async (req, res, next) => {
+  if (req.user._id !== req.params.id) {
+    return res.status(401).json({ message: "You are unauthorized" });
+  }
+  try {
+    const deletedUser = await User.findByIdAndDelete(req.params.id);
+
+    if (!deletedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res
+      .clearCookie("access_token")
+      .status(201)
+      .json({ message: "User deleted successfully" });
   } catch (error) {
     next(error);
   }
