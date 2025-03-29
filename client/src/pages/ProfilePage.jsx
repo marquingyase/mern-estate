@@ -41,8 +41,8 @@ export const ProfilePage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(start());
     try {
+      dispatch(start());
       await axios
         .put(`/api/user/update-user/${user._id}`, formData, {
           withCredentials: true,
@@ -57,8 +57,7 @@ export const ProfilePage = () => {
     }
   };
 
-  const handleDelete = async (e) => {
-    e.preventDefault();
+  const handleDelete = async () => {
     try {
       dispatch(start());
       await axios
@@ -70,22 +69,24 @@ export const ProfilePage = () => {
           toast.success(response.data.message);
         });
     } catch (err) {
+      dispatch(failure());
       toast.error(err.response.data.message);
-      dispatch(failure(err.response.data.message));
     }
   };
 
-  const handleSignout = async (e) => {
-    e.preventDefault();
+  const handleSignout = async () => {
     try {
+      dispatch(start());
       await axios
-        .put(`/api/user/delete-user/${user._id}`, {
+        .get("/api/auth/logout", {
           withCredentials: true,
         })
         .then((response) => {
           toast.success(response.data.message);
+          dispatch(logout());
         });
     } catch (err) {
+      dispatch(failure());
       toast.error(err.response.data.message);
     }
   };

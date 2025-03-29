@@ -11,7 +11,6 @@ export const signUp = async (req, res, next) => {
       Math.random().toString(36).slice(-4);
 
     if (user) {
-
       if (user.email === email) {
         return res.status(409).json({ message: "Email already exists" });
       }
@@ -131,6 +130,14 @@ export const googleSignIn = async (req, res, next) => {
           user: rest,
         });
     }
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const logout = async (req, res, next) => {
+  try {
+    res.clearCookie("access_token").status(200).json({ message: "User logged out" });
   } catch (error) {
     next(error);
   }
