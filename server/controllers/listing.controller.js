@@ -13,31 +13,33 @@ export const add = async (req, res, next) => {
     parking,
     type,
     offer,
-    user,
     images,
+    user,
   } = req.body;
   try {
-    const newListing = new Listing({
-      name,
-      description,
-      address,
-      price,
-      bathrooms,
-      bedrooms,
-      furnished,
-      parking,
-      type,
-      offer,
-      images,
-      user,
-      discountedPrice,
-    });
-    await newListing.save();
+    if (user === req.user._id) {
+      const newListing = new Listing({
+        name,
+        description,
+        address,
+        price,
+        bathrooms,
+        bedrooms,
+        furnished,
+        parking,
+        type,
+        offer,
+        images,
+        user,
+        discountedPrice,
+      });
+      await newListing.save();
 
-    res.status(201).json({
-      message: "Listing added successfully",
-      data: newListing,
-    });
+      res.status(201).json({
+        message: "Listing added successfully",
+        data: newListing,
+      });
+    }
   } catch (error) {
     next(error);
   }

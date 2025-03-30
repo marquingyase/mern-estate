@@ -3,13 +3,16 @@ export const Listing = ({
   handleImageSubmit,
   formDatas,
   loading,
+  load,
+  handleChange,
+  handleSubmit,
 }) => {
   return (
     <main className="p-3 max-w-4xl mx-auto">
       <h1 className="font-semibold text-center my-7 text-3xl">
         Create Listing
       </h1>
-      <form className="flex flex-col sm:flex-row gap-4">
+      <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4">
         <div className="flex flex-col gap-4 flex-1">
           <input
             type="text"
@@ -19,6 +22,8 @@ export const Listing = ({
             maxLength={62}
             minLength={10}
             required
+            onChange={handleChange}
+            value={formDatas.name}
           />
           <textarea
             type="text"
@@ -26,6 +31,8 @@ export const Listing = ({
             className="border p-3 rounded-lg"
             id="description"
             required
+            onChange={handleChange}
+            value={formDatas.description}
           />
           <input
             type="text"
@@ -33,26 +40,58 @@ export const Listing = ({
             className="border p-3 rounded-lg"
             id="address"
             required
+            onChange={handleChange}
+            value={formDatas.address}
           />
           <div className="flex gap-6 flex-wrap">
             <div className="flex gap-2">
-              <input type="checkbox" id="sell" className="w-5" />
+              <input
+                type="checkbox"
+                id="sell"
+                className="w-5"
+                onChange={handleChange}
+                checked={formDatas.type === "sell"}
+              />
               <span>Sell</span>
             </div>
             <div className="flex gap-2">
-              <input type="checkbox" id="rent" className="w-5" />
+              <input
+                type="checkbox"
+                id="rent"
+                className="w-5"
+                onChange={handleChange}
+                checked={formDatas.type === "rent"}
+              />
               <span>Rent</span>
             </div>
             <div className="flex gap-2">
-              <input type="checkbox" id="parking" className="w-5" />
+              <input
+                type="checkbox"
+                id="parking"
+                className="w-5"
+                onChange={handleChange}
+                checked={formDatas.parking}
+              />
               <span>Parking Spot</span>
             </div>
             <div className="flex gap-2">
-              <input type="checkbox" id="furnished" className="w-5" />
+              <input
+                type="checkbox"
+                id="furnished"
+                className="w-5"
+                onChange={handleChange}
+                checked={formDatas.furnished}
+              />
               <span>Furnished</span>
             </div>
             <div className="flex gap-2">
-              <input type="checkbox" id="offer" className="w-5" />
+              <input
+                type="checkbox"
+                id="offer"
+                className="w-5"
+                onChange={handleChange}
+                checked={formDatas.offer}
+              />
               <span>Offer</span>
             </div>
           </div>
@@ -65,6 +104,8 @@ export const Listing = ({
                 min={1}
                 max={10}
                 className="p-3 border rounded-lg"
+                onChange={handleChange}
+                value={formDatas.bedrooms}
               />
               <span>Beds</span>
             </div>
@@ -75,6 +116,8 @@ export const Listing = ({
                 min={1}
                 max={10}
                 className="p-3 border rounded-lg"
+                onChange={handleChange}
+                value={formDatas.bathrooms}
               />
               <span>Baths</span>
             </div>
@@ -83,27 +126,37 @@ export const Listing = ({
                 type="number"
                 id="price"
                 min={1}
-                max={10}
+                max={10000000}
                 className="p-3 border rounded-lg"
+                onChange={handleChange}
+                value={formDatas.price}
               />
               <div className="flex flex-col items-center">
                 <span>Regular Price</span>
-                <span className="text-xs">($ / Month)</span>
+                {formDatas.type === "rent" && (
+                  <span className="text-xs">($ / Month)</span>
+                )}
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <input
-                type="number"
-                id="discountedPrice"
-                min={1}
-                max={10}
-                className="p-3 border rounded-lg"
-              />
-              <div className="flex flex-col items-center">
-                <span>Discounted Price</span>
-                <span className="text-xs">($ / Month)</span>
+            {formDatas.offer && (
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  id="discountedPrice"
+                  min={1}
+                  max={10000000}
+                  className="p-3 border rounded-lg"
+                  onChange={handleChange}
+                  value={formDatas.discountedPrice}
+                />
+                <div className="flex flex-col items-center">
+                  <span>Discounted Price</span>
+                  {formDatas.type === "rent" && (
+                    <span className="text-xs">($ / Month)</span>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
 
@@ -129,7 +182,7 @@ export const Listing = ({
               disabled={loading}
               className="p-3 text-green-700 border border-green-700 rounded uppercase hover:shadow-lg disabled:opacity-55"
             >
-              {loading ? "Uploading..." : "Upload"}
+              {load ? "Uploading..." : "Upload"}
             </button>
           </div>
 
@@ -150,8 +203,11 @@ export const Listing = ({
               </div>
             ))}
 
-          <button className="p-3 bg-slate-700 rounded-lg text-white uppercase hover:opacity-90 disabled:opacity-80">
-            Create Listing
+          <button
+            disabled={load || loading}
+            className="p-3 bg-slate-700 rounded-lg text-white uppercase hover:opacity-90 disabled:opacity-80"
+          >
+            {loading ? "Creating..." : "Create Listing"}
           </button>
         </div>
       </form>

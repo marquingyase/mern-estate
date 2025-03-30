@@ -1,23 +1,37 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { Listing } from "../components/Listing";
 import toast from "react-hot-toast";
 import axios from "axios";
-import { start, success, failure } from "../redux/user/userSlice";
-import { Link } from "react-router";
+import { start, failure } from "../redux/user/userSlice";
+import { useNavigate } from "react-router";
 
 export const ListingPage = () => {
   const [files, setFiles] = useState([]);
   const { loading } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [formDatas, setFormData] = useState({
     images: [],
+    name: "",
+    description: "",
+    address: "",
+    price: 0,
+    discountedPrice: 0,
+    bathrooms: 1,
+    bedrooms: 1,
+    furnished: false,
+    parking: false,
+    type: "rent",
+    offer: false,
   });
+  const [load, setLoad] = useState(false);
 
-  const handleImageSubmit = async (e) => {
+  const handleImageSubmit = async () => {
     // e.preventDefault();
     if (files.length > 0 && files.length + formDatas.images.length < 7) {
-      dispatch(start());
+      setLoad(true);
       const formData = new FormData();
       for (let i = 0; i < files.length; i++) {
         formData.append("files[]", files[i]); // Append each file separately
@@ -30,7 +44,7 @@ export const ListingPage = () => {
           },
         })
         .then((response) => {
-          dispatch(failure());
+          setLoad(false);
           toast.success(response.data.message);
           setFormData({
             ...formDatas,
@@ -38,7 +52,7 @@ export const ListingPage = () => {
           });
         })
         .catch((err) => {
-          dispatch(failure());
+          setLoad(false);
           toast.error(err.response.data.message);
         });
     } else {
@@ -46,27 +60,56 @@ export const ListingPage = () => {
     }
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     dispatch(start());
-  //     await axios
-  //       .put(`/api/user/update-user/${user._id}`, formData, {
-  //         withCredentials: true,
-  //       })
-  //       .then((response) => {
-  //         toast.success(response.data.message);
-  //         dispatch(success(response.data.user));
-  //       });
-  //   } catch (err) {
-  //     dispatch(failure());
-  //     toast.error(err.response.data.message);
-  //   }
-  // };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (formDatas.images.length < 1)
+        return toast.error("You must upload at least one image");
+      if (+formDatas.price < +formDatas.discountedPrice)
+        return toast.error("Discount price must be lower than regular price");
+      dispatch(start());
+      await axios
+        .post(
+          "/api/listing/add",
+          {
+            ...formDatas,
+            user: user._id,
+          },
+          {
+            withCredentials: true,
+          }
+        )
+        .then((response) => {
+          dispatch(failure());
+          toast.success(response.data.message);
+          navigate(`/listing/${response.data.data._id}`);
+        });
+    } catch (err) {
+      dispatch(failure());
+      toast.error(err.response.data.message);
+    }
+  };
 
-  // const handleChange = (e) => {
-  //   setFormData({ ...formData, [e.target.id]: e.target.value });
-  // };
+  const handleChange = (e) => {
+    if (e.target.id === "sell" || e.target.id === "rent") {
+      setFormData({ ...formDatas, type: e.target.id });
+    }
+    if (
+      e.target.id === "parking" ||
+      e.target.id === "furnished" ||
+      e.target.id === "offer"
+    ) {
+      setFormData({ ...formDatas, [e.target.id]: e.target.checked });
+    }
+
+    if (
+      e.target.type === "number" ||
+      e.target.type === "text" ||
+      e.target.type === "textarea"
+    ) {
+      setFormData({ ...formDatas, [e.target.id]: e.target.value });
+    }
+  };
 
   return (
     <Listing
@@ -74,6 +117,9 @@ export const ListingPage = () => {
       handleImageSubmit={handleImageSubmit}
       formDatas={formDatas}
       loading={loading}
+      handleChange={handleChange}
+      handleSubmit={handleSubmit}
+      load={load}
     />
   );
 };
