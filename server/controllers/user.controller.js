@@ -1,3 +1,4 @@
+import Listing from "../models/listing.models.js";
 import User from "../models/user.models.js";
 import bcrypt from "bcryptjs";
 
@@ -50,6 +51,27 @@ export const deleteUser = async (req, res, next) => {
       .clearCookie("access_token")
       .status(201)
       .json({ message: "User deleted successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getUserListing = async (req, res, next) => {
+  try {
+    if (req.user._id !== req.params.id) {
+      return res.status(401).json({ message: "You are unauthorized" });
+    }
+
+    const listings = await Listing.find({ user: req.params.id });
+
+    if (!listings) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({
+      message: "User listings fetched successfully",
+      data: listings,
+    });
   } catch (error) {
     next(error);
   }
