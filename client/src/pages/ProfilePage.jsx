@@ -13,6 +13,7 @@ export const ProfilePage = () => {
   const [file, setFile] = useState(undefined);
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({});
+  const [listings, setListings] = useState([]);
 
   useEffect(() => {
     if (file) {
@@ -92,6 +93,24 @@ export const ProfilePage = () => {
     }
   };
 
+  const handleShowListing = async () => {
+    try {
+      dispatch(start());
+      await axios
+        .get(`/api/user/listings/${user._id}`, {
+          withCredentials: true,
+        })
+        .then((response) => {
+          dispatch(failure());
+          toast.success(response.data.message);
+          setListings(response.data.data);
+        });
+    } catch (err) {
+      dispatch(failure());
+      toast.error(err.response.data.message);
+    }
+  };
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
@@ -106,7 +125,9 @@ export const ProfilePage = () => {
       handleSubmit={handleSubmit}
       handleDelete={handleDelete}
       handleSignout={handleSignout}
+      handleShowListing={handleShowListing}
       Link={Link}
+      listings={listings}
     />
   );
 };

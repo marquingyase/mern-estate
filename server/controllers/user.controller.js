@@ -64,8 +64,8 @@ export const getUserListing = async (req, res, next) => {
 
     const listings = await Listing.find({ user: req.params.id });
 
-    if (!listings) {
-      return res.status(404).json({ message: "User not found" });
+    if (listings.length < 1) {
+      return res.status(404).json({ message: "User has no listings" });
     }
 
     res.status(200).json({

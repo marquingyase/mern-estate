@@ -8,6 +8,8 @@ export const Profile = ({
   handleSubmit,
   handleSignout,
   handleDelete,
+  handleShowListing,
+  listings,
 }) => {
   return (
     <main className="p-3 max-w-lg mx-auto">
@@ -71,6 +73,40 @@ export const Profile = ({
           Sign Out
         </span>
       </div>
+      <button onClick={handleShowListing} className="text-green-700 w-full">
+        Show listings
+      </button>
+      {listings && listings?.length > 0 ? (
+        <div className="flex flex-col gap-2">
+          <h1 className="text-2xl font-semibold text-center my-7">Your listings</h1>
+          {listings.map((listing) => (
+            <div
+              key={listing._id}
+              className="border rounded-lg p-3 flex justify-between items-center gap-4"
+            >
+              <Link to={`/listing/${listing._id}`}>
+                <img
+                  src={listing.images[0]}
+                  alt="Listing cover"
+                  className="w-16 h-16 object-contain"
+                />
+              </Link>
+              <Link
+                className="flex-1 font-semibold text-slate-700 hover:underline truncate"
+                to={`/listing/${listing._id}`}
+              >
+                <h2>{listing.name}</h2>
+              </Link>
+              <div className="flex flex-col">
+                <button className="text-red-700 uppercase">Delete</button>
+                <button className="text-green-700 uppercase">Edit</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        ""
+      )}
     </main>
   );
 };
