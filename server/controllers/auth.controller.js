@@ -45,7 +45,7 @@ export const signIn = async (req, res, next) => {
         _id: user._id,
       },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "1d" }
     );
 
     const { password: pass, ...rest } = user._doc;
@@ -76,7 +76,7 @@ export const googleSignIn = async (req, res, next) => {
           _id: user._id,
         },
         process.env.JWT_SECRET,
-        { expiresIn: "1h" }
+        { expiresIn: "1d" }
       );
 
       const { password: pass, ...rest } = user._doc;
@@ -113,7 +113,7 @@ export const googleSignIn = async (req, res, next) => {
           _id: newUserDetails._id,
         },
         process.env.JWT_SECRET,
-        { expiresIn: "1h" }
+        { expiresIn: "1d" }
       );
 
       const { password: pass, ...rest } = newUserDetails._doc;
@@ -137,7 +137,10 @@ export const googleSignIn = async (req, res, next) => {
 
 export const logout = async (req, res, next) => {
   try {
-    res.clearCookie("access_token").status(200).json({ message: "User logged out" });
+    res
+      .clearCookie("access_token")
+      .status(200)
+      .json({ message: "User logged out" });
   } catch (error) {
     next(error);
   }

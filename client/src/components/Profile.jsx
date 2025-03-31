@@ -7,7 +7,9 @@ export const Profile = ({
   handleChange,
   handleSubmit,
   handleSignout,
-  handleDelete,
+  handleUserDelete,
+  handleListingDelete,
+  handleListingUpdate,
   handleShowListing,
   listings,
 }) => {
@@ -66,7 +68,10 @@ export const Profile = ({
         </Link>
       </form>
       <div className="flex justify-between mt-5">
-        <span className="cursor-pointer text-red-700" onClick={handleDelete}>
+        <span
+          className="cursor-pointer text-red-700"
+          onClick={handleUserDelete}
+        >
           Delete Account
         </span>
         <span className="cursor-pointer text-red-700" onClick={handleSignout}>
@@ -78,7 +83,9 @@ export const Profile = ({
       </button>
       {listings && listings?.length > 0 ? (
         <div className="flex flex-col gap-2">
-          <h1 className="text-2xl font-semibold text-center my-7">Your listings</h1>
+          <h1 className="text-2xl font-semibold text-center my-7">
+            Your listings
+          </h1>
           {listings.map((listing) => (
             <div
               key={listing._id}
@@ -98,8 +105,18 @@ export const Profile = ({
                 <h2>{listing.name}</h2>
               </Link>
               <div className="flex flex-col">
-                <button className="text-red-700 uppercase">Delete</button>
-                <button className="text-green-700 uppercase">Edit</button>
+                <button
+                  onClick={() => handleListingDelete(listing._id)}
+                  className="text-red-700 uppercase cursor-pointer"
+                >
+                  Delete
+                </button>
+                <button
+                  onClick={() => handleListingUpdate(listing._id)}
+                  className="text-green-700 uppercase cursor-pointer"
+                >
+                  Edit
+                </button>
               </div>
             </div>
           ))}

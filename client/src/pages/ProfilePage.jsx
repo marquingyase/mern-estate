@@ -59,7 +59,7 @@ export const ProfilePage = () => {
     }
   };
 
-  const handleDelete = async () => {
+  const handleUserDelete = async () => {
     try {
       dispatch(start());
       await axios
@@ -72,6 +72,35 @@ export const ProfilePage = () => {
         });
     } catch (err) {
       dispatch(failure());
+      toast.error(err.response.data.message);
+    }
+  };
+
+  const handleListingDelete = async (id) => {
+    try {
+      await axios
+        .delete(`/api/listing/delete/${id}`, {
+          withCredentials: true,
+        })
+        .then((response) => {
+          setListings(listings.filter((listing) => listing._id !== id));
+          toast.success(response.data.message);
+        });
+    } catch (err) {
+      toast.error(err.response.data.message);
+    }
+  };
+
+  const handleListingUpdate = async (id) => {
+    try {
+      await axios
+        .delete(`/api/listing/update/${id}`, {
+          withCredentials: true,
+        })
+        .then((response) => {
+          toast.success(response.data.message);
+        });
+    } catch (err) {
       toast.error(err.response.data.message);
     }
   };
@@ -123,9 +152,11 @@ export const ProfilePage = () => {
       user={user}
       handleChange={handleChange}
       handleSubmit={handleSubmit}
-      handleDelete={handleDelete}
+      handleListingDelete={handleListingDelete}
+      handleUserDelete={handleUserDelete}
       handleSignout={handleSignout}
       handleShowListing={handleShowListing}
+      handleListingUpdate={handleListingUpdate}
       Link={Link}
       listings={listings}
     />
