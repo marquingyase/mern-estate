@@ -9,7 +9,7 @@ export const Profile = ({
   handleSignout,
   handleUserDelete,
   handleListingDelete,
-  handleListingUpdate,
+  // handleListingUpdate,
   handleShowListing,
   listings,
 }) => {
@@ -112,7 +112,7 @@ export const Profile = ({
                   Delete
                 </button>
                 <button
-                  onClick={() => handleListingUpdate(listing._id)}
+                  // onClick={() => handleListingUpdate(listing._id)}
                   className="text-green-700 uppercase cursor-pointer"
                 >
                   Edit

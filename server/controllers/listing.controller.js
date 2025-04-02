@@ -1,22 +1,22 @@
 import Listing from "../models/listing.models.js";
 
 export const addListing = async (req, res, next) => {
-  const {
-    name,
-    description,
-    address,
-    price,
-    discountedPrice,
-    bathrooms,
-    bedrooms,
-    furnished,
-    parking,
-    type,
-    offer,
-    images,
-    user,
-  } = req.body;
   try {
+    const {
+      name,
+      description,
+      address,
+      price,
+      discountedPrice,
+      bathrooms,
+      bedrooms,
+      furnished,
+      parking,
+      type,
+      offer,
+      images,
+      user,
+    } = req.body;
     if (user === req.user._id) {
       const newListing = new Listing({
         name,
@@ -84,6 +84,62 @@ export const deleteListing = async (req, res, next) => {
 
     res.status(200).json({
       message: "Listing deleted successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateListing = async (req, res, next) => {
+  try {
+    const {
+      name,
+      description,
+      address,
+      price,
+      discountedPrice,
+      bathrooms,
+      bedrooms,
+      furnished,
+      parking,
+      type,
+      offer,
+      images,
+    } = req.body;
+    const { id } = req.params;
+    const listing = await Listing.findById(id);
+    if (!listing) {
+      return res.status(404).json({
+        message: "Listing not found",
+      });
+    }
+
+    if (listing.user.toString() !== req.user._id.toString()) {
+      return res.status(403).json({
+        message: "You are not authorized to update this listing",
+      });
+    }
+
+    await listing.updateOne(id, {
+      $set: {
+        name,
+        description,
+        address,
+        price,
+        discountedPrice,
+        bathrooms,
+        bedrooms,
+        furnished,
+        parking,
+        type,
+        offer,
+        images,
+      },
+    });
+
+    res.status(200).json({
+      message: "Listing updated successfully",
+      data: listing,
     });
   } catch (error) {
     next(error);

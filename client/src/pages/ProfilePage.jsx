@@ -91,20 +91,6 @@ export const ProfilePage = () => {
     }
   };
 
-  const handleListingUpdate = async (id) => {
-    try {
-      await axios
-        .delete(`/api/listing/update/${id}`, {
-          withCredentials: true,
-        })
-        .then((response) => {
-          toast.success(response.data.message);
-        });
-    } catch (err) {
-      toast.error(err.response.data.message);
-    }
-  };
-
   const handleSignout = async () => {
     try {
       dispatch(start());
@@ -156,7 +142,6 @@ export const ProfilePage = () => {
       handleUserDelete={handleUserDelete}
       handleSignout={handleSignout}
       handleShowListing={handleShowListing}
-      handleListingUpdate={handleListingUpdate}
       Link={Link}
       listings={listings}
     />
