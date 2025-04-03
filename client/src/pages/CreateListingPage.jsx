@@ -1,12 +1,12 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
-import { Listing } from "../components/Listing";
+import { CreateListing } from "../components/CreateListing";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { start, failure } from "../redux/user/userSlice";
 import { useNavigate } from "react-router";
 
-export const ListingPage = () => {
+export const CreateListingPage = () => {
   const [files, setFiles] = useState([]);
   const { loading } = useSelector((state) => state.user);
   const { user } = useSelector((state) => state.user);
@@ -112,7 +112,7 @@ export const ListingPage = () => {
   };
 
   return (
-    <Listing
+    <CreateListing
       setFiles={setFiles}
       handleImageSubmit={handleImageSubmit}
       formDatas={formDatas}

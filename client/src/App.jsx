@@ -5,7 +5,7 @@ import { SignInPage } from "./pages/SignInPage";
 import { AboutPage } from "./pages/AboutPage";
 import { SignUpPage } from "./pages/SignUpPage";
 import { ProfilePage } from "./pages/ProfilePage";
-import { ListingPage } from "./pages/ListingPage.jsx";
+import { CreateListingPage } from "./pages/CreateListingPage.jsx";
 import { Header } from "./components/nav/Header";
 import { PrivateRoute } from "./components/PrivateRoute";
 import { UpdateListingPage } from "./pages/UpdateListingPage.jsx";
@@ -60,7 +60,7 @@ function App() {
         <Route path="about" element={<AboutPage />} />
         <Route element={<PrivateRoute />}>
           <Route path="profile" element={<ProfilePage />} />
-          <Route path="create-listing" element={<ListingPage />} />
+          <Route path="create-listing" element={<CreateListingPage />} />
           <Route path="update-listing/:id" element={<UpdateListingPage />} />
         </Route>
         <Route path="*" element={<AboutPage />} />

@@ -1,4 +1,4 @@
-export const Listing = ({
+export const CreateListing = ({
   setFiles,
   handleImageSubmit,
   formDatas,
