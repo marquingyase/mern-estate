@@ -8,6 +8,7 @@ import { ProfilePage } from "./pages/ProfilePage";
 import { ListingPage } from "./pages/ListingPage.jsx";
 import { Header } from "./components/nav/Header";
 import { PrivateRoute } from "./components/PrivateRoute";
+import { UpdateListingPage } from "./pages/UpdateListingPage.jsx";
 
 function App() {
   // const { pathname } = useLocation();
@@ -60,6 +61,7 @@ function App() {
         <Route element={<PrivateRoute />}>
           <Route path="profile" element={<ProfilePage />} />
           <Route path="create-listing" element={<ListingPage />} />
+          <Route path="update-listing/:id" element={<UpdateListingPage />} />
         </Route>
         <Route path="*" element={<AboutPage />} />
       </Routes>

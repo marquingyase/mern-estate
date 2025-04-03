@@ -111,12 +111,11 @@ export const Profile = ({
                 >
                   Delete
                 </button>
-                <button
-                  // onClick={() => handleListingUpdate(listing._id)}
-                  className="text-green-700 uppercase cursor-pointer"
-                >
-                  Edit
-                </button>
+                <Link to={`/update-listing/${listing._id}`}>
+                  <button className="text-green-700 uppercase cursor-pointer">
+                    Edit
+                  </button>
+                </Link>
               </div>
             </div>
           ))}

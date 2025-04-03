@@ -120,7 +120,7 @@ export const updateListing = async (req, res, next) => {
       });
     }
 
-    await listing.updateOne(id, {
+    const updatedListing = await Listing.findByIdAndUpdate(id, {
       $set: {
         name,
         description,
@@ -139,6 +139,25 @@ export const updateListing = async (req, res, next) => {
 
     res.status(200).json({
       message: "Listing updated successfully",
+      data: updatedListing,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getListing = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const listing = await Listing.findById(id);
+    if (!listing) {
+      return res.status(404).json({
+        message: "Listing not found",
+      });
+    }
+
+    res.status(200).json({
+      message: "Listing fetched successfully",
       data: listing,
     });
   } catch (error) {
