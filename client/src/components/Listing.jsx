@@ -8,12 +8,16 @@ export const Listing = ({
   FaBed,
   FaParking,
   FaChair,
+  user,
+  setContact,
+  contact,
+  ContactLandlord,
 }) => {
   return (
     <main>
       {loading && <p className="text-2xl text-center my-12">Loading</p>}
       {listing && (
-        <>
+        <section>
           <Swiper navigation>
             {listing.images.map((image, index) => (
               <SwiperSlide key={index}>
@@ -75,8 +79,18 @@ export const Listing = ({
                 {listing.furnished ? "Furnished" : "Unfurnished"}
               </li>
             </ul>
+            {user && listing.user._id === user._id && !contact && (
+              <button
+                onClick={() => setContact(true)}
+                type="button"
+                className="text-white bg-slate-700 rounded-lg  uppercase hover:opacity-95 p-3"
+              >
+                Contact Landlord
+              </button>
+            )}
+            {contact && <ContactLandlord listing={listing} />}
           </div>
-        </>
+        </section>
       )}
     </main>
   );

@@ -149,7 +149,10 @@ export const updateListing = async (req, res, next) => {
 export const getListing = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const listing = await Listing.findById(id);
+    const listing = await Listing.findById(id).populate(
+      "user",
+      "-password -__v"
+    );
     if (!listing) {
       return res.status(404).json({
         message: "Listing not found",
