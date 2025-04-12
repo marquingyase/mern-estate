@@ -3,15 +3,13 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { start, failure } from "../redux/user/userSlice";
-import { useNavigate, useParams } from "react-router";
+import { useParams } from "react-router";
 import { UpdateListing } from "../components/UpdateListing";
 
 export const UpdateListingPage = () => {
   const [files, setFiles] = useState([]);
   const { loading } = useSelector((state) => state.user);
-  const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const params = useParams();
   const [formDatas, setFormData] = useState({
     images: [],
@@ -96,7 +94,7 @@ export const UpdateListingPage = () => {
         .then((response) => {
           dispatch(failure());
           toast.success(response.data.message);
-        //   navigate(`/listing/${response.data.data._id}`);
+          //   navigate(`/listing/${response.data.data._id}`);
         });
     } catch (err) {
       dispatch(failure());

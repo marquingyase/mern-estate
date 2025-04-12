@@ -5,10 +5,11 @@ import { SignInPage } from "./pages/SignInPage";
 import { AboutPage } from "./pages/AboutPage";
 import { SignUpPage } from "./pages/SignUpPage";
 import { ProfilePage } from "./pages/ProfilePage";
-import { CreateListingPage } from "./pages/CreateListingPage.jsx";
+import { ListingPage } from "./pages/ListingPage.jsx";
+import { CreateListingPage } from "./pages/CreateListingPage";
 import { Header } from "./components/nav/Header";
 import { PrivateRoute } from "./components/PrivateRoute";
-import { UpdateListingPage } from "./pages/UpdateListingPage.jsx";
+import { UpdateListingPage } from "./pages/UpdateListingPage";
 
 function App() {
   // const { pathname } = useLocation();
@@ -58,6 +59,7 @@ function App() {
         <Route path="sign-in" element={<SignInPage />} />
         <Route path="sign-up" element={<SignUpPage />} />
         <Route path="about" element={<AboutPage />} />
+        <Route path="listing/:id" element={<ListingPage />} />
         <Route element={<PrivateRoute />}>
           <Route path="profile" element={<ProfilePage />} />
           <Route path="create-listing" element={<CreateListingPage />} />
